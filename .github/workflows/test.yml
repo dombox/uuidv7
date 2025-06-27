@@ -44,13 +44,6 @@ jobs:
           flags: unittests
           name: codecov-${{ matrix.go-version }}
 
-      - name: Upload coverage to Coveralls
-        uses: coverallsapp/github-action@v2
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: coverage.out
-          format: golang
-
   lint:
     runs-on: ubuntu-latest
     steps:
