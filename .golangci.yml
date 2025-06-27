@@ -4,7 +4,7 @@ run:
   tests: true
 
 output:
-  format: colored-line-number
+  formats: colored-line-number
   print-issued-lines: true
   print-linter-name: true
 
@@ -12,10 +12,7 @@ linters-settings:
   errcheck:
     check-type-assertions: true
     check-blank: true
-  
-  govet:
-    check-shadowing: true
-  
+
   gocyclo:
     min-complexity: 15
   
@@ -38,14 +35,10 @@ linters:
     - staticcheck
     - typecheck
     - unused
-    - varcheck
-    - deadcode
-    - structcheck
     - misspell
     - unconvert
     - gofmt
     - goimports
-    - golint
     - gosec
     - gocyclo
     - goconst

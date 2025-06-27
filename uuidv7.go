@@ -35,6 +35,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"math"
 	"regexp"
 	"sync"
 	"time"
@@ -128,7 +129,10 @@ func (u UUID) Timestamp() time.Time {
 		uint64(u[4])<<8 |
 		uint64(u[5])
 
-	return time.UnixMilli(int64(timestamp))
+	if timestamp > math.MaxInt64 {
+		return time.Unix(0, 0) // return epoch on overflow
+	}
+	return time.UnixMilli(int64(timestamp)) // #nosec G115
 }
 
 // RandA extracts the 12-bit rand_a field from the UUID.
@@ -367,14 +371,23 @@ func (g *Generator) secureRandRead(buf []byte) error {
 
 // New generates a new UUIDv7 with proper monotonic ordering
 func (g *Generator) New() (UUID, error) {
-	now := uint64(time.Now().UnixMilli())
+	nowMs := time.Now().UnixMilli()
+	if nowMs < 0 {
+		nowMs = 0
+	}
+	now := uint64(nowMs) // #nosec G115
 
 	g.mu.Lock()
 	defer g.mu.Unlock()
 
 	// Handle clock regression
 	if now < g.state.timestamp {
-		drift := time.Duration(g.state.timestamp-now) * time.Millisecond
+		var drift time.Duration
+		if g.state.timestamp > math.MaxInt64 {
+			drift = time.Duration(math.MaxInt64)
+		} else {
+			drift = time.Duration(g.state.timestamp-now) * time.Millisecond // #nosec G115
+		}
 		if drift > g.config.ClockDriftTolerance {
 			return UUID{}, fmt.Errorf("%w: drift %v (current: %d, last: %d)",
 				ErrClockRegression, drift, now, g.state.timestamp)
@@ -546,7 +559,10 @@ func (g *Generator) generateMonotonicClockSequence() (uint16, uint64, error) {
 	}
 
 	// Place sub-ms counter in rand_a field (high precision timestamp extension)
-	randA := uint16(g.state.subMsCounter) & ((1 << g.config.ClockSequenceBits) - 1)
+	if g.state.subMsCounter > math.MaxUint16 {
+		g.state.subMsCounter = g.state.subMsCounter % (math.MaxUint16 + 1)
+	}
+	randA := uint16(g.state.subMsCounter) & ((1 << g.config.ClockSequenceBits) - 1) // #nosec G115
 
 	// Generate random rand_b
 	var randBBytes [8]byte
@@ -616,11 +632,20 @@ func (g *Generator) NewBatch(count int) ([]UUID, error) {
 	g.mu.Lock()
 	defer g.mu.Unlock()
 
-	now := uint64(time.Now().UnixMilli())
+	nowMs := time.Now().UnixMilli()
+	if nowMs < 0 {
+		nowMs = 0
+	}
+	now := uint64(nowMs) // #nosec G115
 
 	// Handle clock regression
 	if now < g.state.timestamp {
-		drift := time.Duration(g.state.timestamp-now) * time.Millisecond
+		var drift time.Duration
+		if g.state.timestamp > math.MaxInt64 {
+			drift = time.Duration(math.MaxInt64)
+		} else {
+			drift = time.Duration(g.state.timestamp-now) * time.Millisecond // #nosec G115
+		}
 		if drift > g.config.ClockDriftTolerance {
 			return nil, fmt.Errorf("%w: drift %v (current: %d, last: %d)",
 				ErrClockRegression, drift, now, g.state.timestamp)

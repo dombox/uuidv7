@@ -1286,7 +1286,10 @@ func BenchmarkJSONMarshal(b *testing.B) {
 
 func BenchmarkJSONUnmarshal(b *testing.B) {
 	uuid := MustNew()
-	data, _ := json.Marshal(uuid)
+	data, err := json.Marshal(uuid)
+	if err != nil {
+		b.Fatal(err)
+	}
 	var target UUID
 
 	b.ResetTimer()
@@ -1743,7 +1746,10 @@ func TestRFC9562AppendixA6(t *testing.T) {
 		t.Errorf("Variant mismatch:\ngot  %d\nwant %d", got, expectedVariant)
 	}
 
-	expectedTime, _ := time.Parse(time.RFC3339Nano, expectedTimestamp)
+	expectedTime, err := time.Parse(time.RFC3339Nano, expectedTimestamp)
+	if err != nil {
+		t.Fatal(err)
+	}
 	if got := uuid.Timestamp().UTC(); !got.Equal(expectedTime) {
 		t.Errorf("Timestamp mismatch:\ngot  %v (%d ms)\nwant %v (%d ms)",
 			got, got.UnixMilli(), expectedTime, expectedTime.UnixMilli())
