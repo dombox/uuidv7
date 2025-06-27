@@ -31,6 +31,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-${{ matrix.go-version }}-
 
+      - name: Confirm Go version
+        run: |
+          which go
+          go version
+
       - name: Run tests
         run: go test -v -race -coverprofile=coverage.out ./...
 
