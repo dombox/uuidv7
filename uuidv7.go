@@ -366,7 +366,7 @@ func (g *Generator) secureRandRead(buf []byte) error {
 			}
 		}
 	}
-	return fmt.Errorf("%w: %w", ErrRandomGeneration, lastErr)
+	return fmt.Errorf("%w: %v", ErrRandomGeneration, lastErr)
 }
 
 // New generates a new UUIDv7 with proper monotonic ordering
@@ -425,7 +425,7 @@ func (g *Generator) New() (UUID, error) {
 // NewWithContext generates a new UUIDv7 with context support
 func (g *Generator) NewWithContext(ctx context.Context) (UUID, error) {
 	if err := ctx.Err(); err != nil {
-		return UUID{}, fmt.Errorf("%w: %w", ErrContextCanceled, err)
+		return UUID{}, fmt.Errorf("%w: %v", ErrContextCanceled, err)
 	}
 	return g.New()
 }
@@ -679,7 +679,7 @@ func (g *Generator) NewBatch(count int) ([]UUID, error) {
 // NewBatchWithContext generates multiple UUIDs with context support
 func (g *Generator) NewBatchWithContext(ctx context.Context, count int) ([]UUID, error) {
 	if err := ctx.Err(); err != nil {
-		return nil, fmt.Errorf("%w: %w", ErrContextCanceled, err)
+		return nil, fmt.Errorf("%w: %v", ErrContextCanceled, err)
 	}
 
 	// For large batches, check context periodically
@@ -689,7 +689,7 @@ func (g *Generator) NewBatchWithContext(ctx context.Context, count int) ([]UUID,
 
 		for remaining := count; remaining > 0; {
 			if err := ctx.Err(); err != nil {
-				return nil, fmt.Errorf("%w: %w", ErrContextCanceled, err)
+				return nil, fmt.Errorf("%w: %v", ErrContextCanceled, err)
 			}
 
 			batchSize := chunkSize
@@ -793,7 +793,7 @@ func Parse(s string) (UUID, error) {
 
 	bytes, err := hex.DecodeString(hexStr)
 	if err != nil {
-		return UUID{}, fmt.Errorf("%w: invalid hex encoding: %w", ErrInvalidUUIDFormat, err)
+		return UUID{}, fmt.Errorf("%w: invalid hex encoding: %v", ErrInvalidUUIDFormat, err)
 	}
 
 	var uuid UUID
