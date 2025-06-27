@@ -586,7 +586,6 @@ func (g *Generator) BuildUUID(timestamp uint64, randA uint16, randB uint64) UUID
 	uuid[14] = byte(randB >> 8)
 	uuid[15] = byte(randB)
 
-
 	return uuid
 }
 
