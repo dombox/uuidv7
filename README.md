@@ -1,6 +1,6 @@
 # UUIDv7 - RFC 9562 Compliant Time-Ordered UUIDs for Go
 
-[![Go Version](https://img.shields.io/github/go-mod/go-version/dombox/uuidv7)](https://golang.org/doc/install)
+[![Go Version](https://img.shields.io/badge/go-1.19+-blue?logo=go)](https://golang.org/doc/install)
 [![Tests](https://github.com/dombox/uuidv7/actions/workflows/test.yml/badge.svg)](https://github.com/dombox/uuidv7/actions/workflows/test.yml)
 [![codecov](https://codecov.io/gh/dombox/uuidv7/branch/main/graph/badge.svg)](https://codecov.io/gh/dombox/uuidv7)
 [![Go Report Card](https://goreportcard.com/badge/github.com/dombox/uuidv7)](https://goreportcard.com/report/github.com/dombox/uuidv7)
