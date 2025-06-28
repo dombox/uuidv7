@@ -7,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Go Reference](https://pkg.go.dev/badge/github.com/dombox/uuidv7.svg)](https://pkg.go.dev/github.com/dombox/uuidv7)
 
-A production-ready Go implementation of UUIDv7 that generates time-ordered, universally unique identifiers according to RFC 9562. Perfect for database primary keys, distributed systems, and any application requiring sortable unique identifiers.
+A production-grade Go implementation of UUIDv7 that generates time-ordered, universally unique identifiers according to RFC 9562. Perfect for database primary keys, distributed systems, and any application requiring sortable unique identifiers.
 
 ## Features
 
