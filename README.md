@@ -564,7 +564,7 @@ SOFTWARE.
 
 This project maintains high code quality with comprehensive testing:
 
-- **91.1% test coverage** - Extensive test suite covering all major functionality
+- **Extensive test coverage** - Extensive test suite covering all major functionality
 - **Automated testing** - GitHub Actions CI/CD pipeline tests against Go 1.19-1.22
 - **Race condition detection** - All tests run with `-race` flag
 - **Benchmarks** - Performance benchmarks for all major operations
